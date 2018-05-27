@@ -68,7 +68,7 @@
 
         .comment {
             font-size: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
         .comment a {
@@ -108,21 +108,21 @@
             font-size: 45px;
         }
 
-        .comments {
+        /*.comments {
             overflow: auto;
             height: 500px;
-        }
+        }*/
 
         .comment {
-            height: 20px;
+            height: 60px;
             border: 1px blue;
             background: gray;
         }
 
-        .comment>div {
+        /*.comment>div {
             width: 200px;
             float: left;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -220,26 +220,15 @@
 
     function writeComments() {
 
-        const scrollTop = commentsContainer.scrollTop;
-        const containerHeight = commentsContainer.offsetHeight;
-        const nComments = sortedComments.length;
-        const actualHeight = nComments * 40;
-        const currentTopItemIndex = Math.floor(nComments * scrollTop/actualHeight);
-        const nCommentsInView = containerHeight/40; //TODO::20 is hard coded right now...
-        const diffFromTop = scrollTop;
-        const diffFromBottom = actualHeight - scrollTop;
-
         let tcontents = '';
 
-        tcontents += `<div style="height: ${diffFromTop}px;"></div>`;
-        for (var c = currentTopItemIndex; c < currentTopItemIndex + nCommentsInView; c++){
+        for (var c = 0; c < sortedComments.length; c++){
             tcontents += '<div class="comment">' +
                 '<div>' + c + ':</div>' +
                 '<div>' + sortedComments[c].word + '</div>' +
                 '<div>' + sortedComments[c].number + '</div>' +
                 '</div>';
         }
-        tcontents += `<div style="height: ${diffFromBottom}px;"></div>`;
 
         commentsContainer.innerHTML = tcontents;
         commentsContainer.appendChild(table);
