@@ -194,7 +194,7 @@
     function onSortOne(e) {
         sortedComments = comments.concat([]);
         bubbleSort();
-        requestAnimationFrame(writeComments);
+        writeComments();
     }
 
     function onSortTwo(e) {
@@ -202,7 +202,7 @@
         sortedComments.sort(function(a, b) {
             return a.number - b.number;
         });
-        requestAnimationFrame(writeComments);
+        writeComments();
     }
 
     function populate() {
