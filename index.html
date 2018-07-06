@@ -215,28 +215,29 @@
     }
 
     function afterShow(cb, startTime) {
-        cb();
-        timeElement.textContent = (new Date().getTime() - startTime)/1000;
-        document.getElementById('sorting-started').style.display = 'none';
-        document.getElementById('sorting-finished').style.display = 'block';
+            cb();
+            timeElement.textContent = (new Date().getTime() - startTime)/1000;
+            document.getElementById('sorting-started').style.display = 'none';
+            document.getElementById('sorting-finished').style.display = 'block';
     }
     function timeCatcher(cb) {
         return function() {
             startTime = new Date().getTime();
+
             document.getElementById('sorting-started').style.display = 'block';
             document.getElementById('sorting-finished').style.display = 'none';
-            $.fancybox.open({
-                src  : `#sorting-confirmation`,
-                type : 'inline',
-                animationDuration: 500,
-                opts : {
-                    afterShow : function( instance, current ) {
-
+            requestAnimationFrame(() => {
+                $.fancybox.open({
+                    src  : `#sorting-confirmation`,
+                    type : 'inline',
+                    transitionDuration: 100,
+                    opts : {
+                        afterShow : function( instance, current ) {
+                            afterShow(cb, startTime);
+                        }
                     }
-                }
-            });
-
-            afterShow(cb, startTime);
+                });
+            })
         }
     }
     (function init() {
