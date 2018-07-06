@@ -11,9 +11,9 @@
     Released under the MIT license: http://jsbin.mit-license.org
     -->
     <meta name="robots" content="noindex">
-    <title>JS Bin</title>
+    <title>Performance Example</title>
 
-    <style id="jsbin-css">
+    <style>
         * {
             box-sizing: border-box;
         }
@@ -45,7 +45,7 @@
 
         .comment {
             font-size: 14px;
-            margin-bottom: 5px;
+            margin-bottom: 20px;
         }
 
         .comment a {
@@ -69,13 +69,13 @@
             font-size: 45px;
         }
 
-        /*.comments {
+        .comments {
             overflow: auto;
             height: 500px;
-        }*/
+        }
 
         .comment {
-            height: 60px;
+            height: 20px;
             border: 1px blue;
             background: gray;
         }
@@ -104,8 +104,15 @@
 </div>
 
 <div style="display: none;" id="sorting-confirmation">
-    <h2>Hello</h2>
-    <p>You've sorted the data!</p>
+    <div id="sorting-finished">
+        <h2>Amazing!</h2>
+        <p>You've sorted the data in <span id="time"></span> seconds!</p>
+    </div>
+    <div id="sorting-started">
+        <h2>Sorting!</h2>
+        <p>Please wait...</p>
+    </div>
+
 </div>
 <script>
     const HEIGHT = 500;
@@ -116,7 +123,8 @@
     var commentsContainer = document.querySelector('.comments');
     var sortOne = document.querySelector('.sort-one');
     var sortTwo = document.querySelector('.sort-two');
-    var count = 0;
+    var startTime = 0;
+    var timeElement = document.getElementById('time');
     var words = ['Boursin',
         'the big cheese',
         'fromage frais',
@@ -180,7 +188,7 @@
     function populate() {
 
         comments = [];
-        for (var i = 0; i < 10000; i++) {
+        for (var i = 0; i < 5000; i++) {
             comments.push({
                 word: words[Math.floor(Math.random() * words.length)],
                 number: Math.random()
@@ -191,17 +199,6 @@
     }
 
     function writeComments() {
-
-        $.fancybox.open({
-            src  : `#sorting-confirmation`,
-            type : 'inline',
-            animationDuration: 500,
-            opts : {
-                afterShow : function( instance, current ) {
-                    console.log( 'done!' );
-                }
-            }
-        });
 
         let tcontents = '';
 
@@ -217,9 +214,34 @@
         commentsContainer.appendChild(table);
     }
 
+    function afterShow(cb, startTime) {
+        cb();
+        timeElement.textContent = (new Date().getTime() - startTime)/1000;
+        document.getElementById('sorting-started').style.display = 'none';
+        document.getElementById('sorting-finished').style.display = 'block';
+    }
+    function timeCatcher(cb) {
+        return function() {
+            startTime = new Date().getTime();
+            document.getElementById('sorting-started').style.display = 'block';
+            document.getElementById('sorting-finished').style.display = 'none';
+            $.fancybox.open({
+                src  : `#sorting-confirmation`,
+                type : 'inline',
+                animationDuration: 500,
+                opts : {
+                    afterShow : function( instance, current ) {
+
+                    }
+                }
+            });
+
+            afterShow(cb, startTime);
+        }
+    }
     (function init() {
-        sortOne.addEventListener('click', onSortOne);
-        sortTwo.addEventListener('click', onSortTwo);
+        sortOne.addEventListener('click', (timeCatcher(onSortOne)));
+        sortTwo.addEventListener('click', (timeCatcher(onSortTwo)));
         commentsContainer.addEventListener('scroll', writeComments);
         populate();
         writeComments();
