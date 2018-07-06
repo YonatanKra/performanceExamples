@@ -27,15 +27,6 @@
             font-size: 14px;
         }
 
-        .left {
-            float: left;
-            width: 30%;
-            padding: 0 10px 0 0;
-            overflow: scroll-y;
-
-            transition: width 3.2s ease-out;
-        }
-
         .control a {
             padding: 6px 12px;
             background: linear-gradient(#00B2B2, #0085B2);
@@ -52,20 +43,6 @@
             background: red;
         }
 
-        .author {
-            font-weight: bold;
-            font-size: 16px;
-            margin: 0 0 3px 0;
-            color: #222;
-        }
-
-        .datetime {
-            font-style: italic;
-            font-size: 12px;
-            margin: 0 0 10px 0;
-            color: #888;
-        }
-
         .comment {
             font-size: 14px;
             margin-bottom: 5px;
@@ -77,22 +54,6 @@
             display: block;
             padding: 8px;
             color: #666;
-        }
-
-        .right {
-            float: left;
-            width: 70%;
-            background: white;
-            height: 100%;
-            padding: 30px;
-
-            transition: width 3.2s ease-out;
-        }
-
-        .output {
-            font-family: Georgia;
-            font-style: italic;
-            font-size: 50px;
         }
 
         body.wide .left {
@@ -124,6 +85,12 @@
             float: left;
         }*/
     </style>
+
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+
 </head>
 <body>
 
@@ -134,6 +101,11 @@
 
 <div class="comments">
 
+</div>
+
+<div style="display: none;" id="sorting-confirmation">
+    <h2>Hello</h2>
+    <p>You've sorted the data!</p>
 </div>
 <script>
     const HEIGHT = 500;
@@ -208,7 +180,7 @@
     function populate() {
 
         comments = [];
-        for (var i = 0; i < 7000; i++) {
+        for (var i = 0; i < 10000; i++) {
             comments.push({
                 word: words[Math.floor(Math.random() * words.length)],
                 number: Math.random()
@@ -219,6 +191,17 @@
     }
 
     function writeComments() {
+
+        $.fancybox.open({
+            src  : `#sorting-confirmation`,
+            type : 'inline',
+            animationDuration: 500,
+            opts : {
+                afterShow : function( instance, current ) {
+                    console.log( 'done!' );
+                }
+            }
+        });
 
         let tcontents = '';
 
