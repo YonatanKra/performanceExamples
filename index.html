@@ -200,15 +200,26 @@
 
     function writeComments() {
 
+        const scrollTop = commentsContainer.scrollTop;
+        const containerHeight = commentsContainer.offsetHeight;
+        const nComments = sortedComments.length;
+        const actualHeight = nComments * 40;
+        const currentTopItemIndex = Math.floor(nComments * scrollTop/actualHeight);
+        const nCommentsInView = containerHeight/40; //TODO::20 is hard coded right now...
+        const diffFromTop = scrollTop;
+        const diffFromBottom = actualHeight - scrollTop;
+
         let tcontents = '';
 
-        for (var c = 0; c < sortedComments.length; c++){
+        tcontents += `<div style="height: ${diffFromTop}px;"></div>`;
+        for (var c = currentTopItemIndex; c < currentTopItemIndex + nCommentsInView; c++){
             tcontents += '<div class="comment">' +
                 '<div>' + c + ':</div>' +
                 '<div>' + sortedComments[c].word + '</div>' +
                 '<div>' + sortedComments[c].number + '</div>' +
                 '</div>';
         }
+        tcontents += `<div style="height: ${diffFromBottom}px;"></div>`;
 
         commentsContainer.innerHTML = tcontents;
         commentsContainer.appendChild(table);
