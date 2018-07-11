@@ -233,8 +233,6 @@
     }
     function timeCatcher(cb) {
         return function() {
-            startTime = new Date().getTime();
-
             document.getElementById('sorting-started').style.display = 'block';
             document.getElementById('sorting-finished').style.display = 'none';
             requestAnimationFrame(() => {
@@ -244,6 +242,7 @@
                     transitionDuration: 100,
                     opts : {
                         afterShow : function( instance, current ) {
+                            startTime = new Date().getTime();
                             afterShow(cb, startTime);
                         }
                     }
